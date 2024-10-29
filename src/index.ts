@@ -1,8 +1,9 @@
 // imports
-import express, { Router } from "express";
-import serverless from "serverless-http";
-import cors from "cors";
-import verifyToken from "../verify";
+const express = require('express');
+const { Router } = express;
+const serverless = require('serverless-http');
+const cors = require('cors');
+const verifyToken = require('../verify');
 
 // initial config
 const api = express();
