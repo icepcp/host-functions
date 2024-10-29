@@ -7,3 +7,5 @@
   from = "/*"
   status = 200
   to = "/.netlify/functions/index/:splat"
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
