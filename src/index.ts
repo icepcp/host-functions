@@ -1,5 +1,5 @@
 // imports
-const express = require('express');
+const express = require('express').default;
 const { Router } = express;
 const serverless = require('serverless-http');
 const cors = require('cors');
