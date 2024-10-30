@@ -1,5 +1,4 @@
 const { initializeApp } = require('firebase-admin/app');
-const { getAuth } = require("firebase-admin/auth");
 
 var admin = require("firebase-admin");
 const serviceAccount = {
@@ -15,17 +14,7 @@ const serviceAccount = {
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-7bhtf%40myt-hosting.iam.gserviceaccount.com",
     "universe_domain": "googleapis.com"
   }  
-initializeApp({
+
+export const firebaseApp = initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
-
-export default async function verifyToken(authHeader: string) {
-    try {
-      const decodedToken = await getAuth().verifyIdToken(authHeader.split(' ')[1]);
-      return { uid: decodedToken.uid, error: null };
-    } catch (error) {
-      console.error('Token verification failed:', error);
-      return { uid: null, error: 'Unauthorized' };
-    }
-  }
-  

@@ -1,32 +1,54 @@
 // imports
 import express, { Router } from "express";
 import serverless from "serverless-http";
+import { getAuth } from "firebase-admin/auth";
+import { firebaseApp } from "../firebase";
 import cors from "cors";
-import verifyToken from "../verify";
+import { getAppCheck } from "firebase-admin/app-check";
 
 // initial config
 const api = express();
 const router = Router();
+firebaseApp;
 
 // cors
 const corsOptions = {
 }
 api.use(cors(corsOptions));
 
-// verification
+// firebase auth token verification
 api.use(async (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (authHeader) {
-        const { error } = await verifyToken(authHeader)
-        if (error) {
-            res.sendStatus(401);
-        } else {
+        try {
+            await getAuth().verifyIdToken(authHeader.split(' ')[1]);
             next();
-        };
+        } catch (error) {
+            res.sendStatus(401);
+        }
     } else {
         res.sendStatus(400);
     }
 })
+
+// firebase app check verification
+api.use(async (req, res, next) => {
+    const appCheckToken = req.header("X-Firebase-AppCheck");
+    if (appCheckToken) {
+        try {
+            const check = await getAppCheck().verifyToken(appCheckToken, { consume: true });
+            if (check.alreadyConsumed) {
+                res.sendStatus(401);
+            } else {
+                next();
+            }
+        } catch (err) {
+            res.sendStatus(401);
+        }
+    } else {
+        res.sendStatus(401);
+    }
+});
 
 // apis
 router.post("/notify", async (req, res) => {
