@@ -24,7 +24,7 @@ api.use(async (req, res, next) => {
             await getAuth().verifyIdToken(authHeader.split(' ')[1]);
             next();
         } catch (error) {
-            res.sendStatus(401);
+            res.status(401).send(error);
         }
     } else {
         res.sendStatus(400);
@@ -38,15 +38,15 @@ api.use(async (req, res, next) => {
         try {
             const check = await getAppCheck().verifyToken(appCheckToken, { consume: true });
             if (check.alreadyConsumed) {
-                res.sendStatus(401);
+                res.status(401).send('Token already consumed');
             } else {
                 next();
             }
         } catch (err) {
-            res.sendStatus(401);
+            res.status(401).send(err);
         }
     } else {
-        res.sendStatus(401);
+        res.sendStatus(400);
     }
 });
 
