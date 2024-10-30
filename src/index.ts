@@ -2,14 +2,18 @@
 import express, { Router } from "express";
 import serverless from "serverless-http";
 import { getAuth } from "firebase-admin/auth";
-import { firebaseApp } from "../firebase";
+import { initializeApp } from 'firebase-admin/app';
+import { serviceAccount } from "../firebase";
 import cors from "cors";
 import { getAppCheck } from "firebase-admin/app-check";
 
 // initial config
 const api = express();
 const router = Router();
-firebaseApp;
+const admin = require("firebase-admin");
+initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
 
 // cors
 const corsOptions = {
