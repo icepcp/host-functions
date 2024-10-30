@@ -6,7 +6,7 @@ const serviceAccount = {
     "type": "service_account",
     "project_id": "myt-hosting",
     "private_key_id": process.env.FB_PRIVATE_KEY_ID,
-    "private_key": process.env.FB_PRIVATE_KEY,
+    "private_key": process.env.FB_PRIVATE_KEY ? JSON.parse(process.env.FB_PRIVATE_KEY) : undefined,
     "client_email": process.env.FB_CLIENT_EMAIL,
     "client_id": process.env.FB_CLIENT_ID,
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
